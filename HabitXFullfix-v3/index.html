@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>HabitXFullfix</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="offlineBanner" class="banner" aria-live="polite" role="status" hidden>
+    <span>✅ Offline Ready — you can Add to Home Screen now</span>
+    <button id="bannerClose" aria-label="Dismiss">✕</button>
+  </div>
+
+  <header class="appbar">
+    <h1>HabitX</h1>
+    <div class="actions">
+      <button id="installBtn" class="ghost" aria-label="Install">➕</button>
+      <button id="addHabitBtn" class="primary">Add Habit</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div class="row wrap">
+        <select id="habitSelect" aria-label="Select habit"></select>
+        <button id="deleteHabitBtn" class="danger">Delete Habit</button>
+      </div>
+
+      <details id="descBox">
+        <summary>Habit Details</summary>
+        <label>Description
+          <textarea id="habitDesc" rows="3" placeholder="Describe what this habit entails..."></textarea>
+        </label>
+        <div class="row">
+          <button id="saveDescBtn" class="primary">Save Details</button>
+        </div>
+      </details>
+
+      <div class="meta">
+        <div><label>Start Date</label><span id="startDate">—</span></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat"><span id="currentStreak">0</span><label>Current Streak</label></div>
+        <div class="stat"><span id="longestStreak">0</span><label>Longest Streak</label></div>
+        <div class="stat"><span id="completionPct">0%</span><label>Last 30d %</label></div>
+        <div class="stat"><span id="monthProgress">0/0</span><label>Month Done</label></div>
+        <div class="stat"><span id="lifetimePct">0%</span><label>Lifetime %</label></div>
+        <div class="stat"><span id="lifetimeDone">0</span><label>Lifetime Done</label></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="row cal-header">
+        <button id="prevMonth" class="ghost" aria-label="Previous month">◀</button>
+        <h2 id="monthLabel"></h2>
+        <button id="nextMonth" class="ghost" aria-label="Next month">▶</button>
+      </div>
+      <div class="weekday-row">
+        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+      </div>
+      <div id="calendarGrid" class="calendar" role="grid" aria-label="Calendar"></div>
+    </section>
+
+    <section class="panel">
+      <div class="row wrap">
+        <button id="exportBtn">Export Data</button>
+        <label class="import">
+          <input type="file" id="importFile" accept=".json" hidden>
+          <span class="button">Import Data</span>
+        </label>
+      </div>
+      <p class="fine">Tip: Tap a day to toggle completion. Data is saved locally (IndexedDB) and survives refresh/restarts.</p>
+    </section>
+  </main>
+
+  <!-- Add Habit Dialog -->
+  <dialog id="habitDialog">
+    <form id="habitForm">
+      <h3>New Habit</h3>
+      <label>Name<input id="habitName" required maxlength="40" placeholder="e.g., Read 20 minutes"></label>
+      <label>Emoji / Color
+        <div class="row">
+          <input id="habitEmoji" maxlength="2" placeholder="📚">
+          <input id="habitColor" type="color" value="#ff9800" aria-label="Habit color">
+        </div>
+      </label>
+      <menu>
+        <button type="button" value="cancel" onclick="document.getElementById('habitDialog').close()">Cancel</button>
+        <button type="submit" value="ok" class="primary">Create</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
