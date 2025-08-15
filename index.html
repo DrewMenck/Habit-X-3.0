@@ -11,25 +11,47 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div id="offlineBanner" class="banner" aria-live="polite" role="status" hidden>✅ Offline Ready — you can Add to Home Screen now</div>
+  <div id="offlineBanner" class="banner" aria-live="polite" role="status" hidden>
+    <span>✅ Offline Ready — you can Add to Home Screen now</span>
+    <button id="bannerClose" aria-label="Dismiss">✕</button>
+  </div>
 
   <header class="appbar">
-    <h1>HabitXFullfix</h1>
-    <button id="installBtn" class="ghost" aria-label="Install">➕</button>
+    <h1>HabitX</h1>
+    <div class="actions">
+      <button id="installBtn" class="ghost" aria-label="Install">➕</button>
+      <button id="addHabitBtn" class="primary">Add Habit</button>
+    </div>
   </header>
 
   <main>
     <section class="panel">
       <div class="row wrap">
         <select id="habitSelect" aria-label="Select habit"></select>
-        <button id="addHabitBtn" class="primary">Add Habit</button>
-        <button id="bulkAddBtn">Add Multiple</button>
+        <button id="deleteHabitBtn" class="danger">Delete Habit</button>
       </div>
-      <div class="stats">
+
+      <details id="descBox">
+        <summary>Habit Details</summary>
+        <label>Description
+          <textarea id="habitDesc" rows="3" placeholder="Describe what this habit entails..."></textarea>
+        </label>
+        <div class="row">
+          <button id="saveDescBtn" class="primary">Save Details</button>
+        </div>
+      </details>
+
+      <div class="meta">
+        <div><label>Start Date</label><span id="startDate">—</span></div>
+      </div>
+
+      <div class="stats-grid">
         <div class="stat"><span id="currentStreak">0</span><label>Current Streak</label></div>
         <div class="stat"><span id="longestStreak">0</span><label>Longest Streak</label></div>
-        <div class="stat"><span id="completionPct">0%</span><label>30d %</label></div>
-        <div class="stat"><span id="habitScore">0</span><label>Score</label></div>
+        <div class="stat"><span id="completionPct">0%</span><label>Last 30d %</label></div>
+        <div class="stat"><span id="monthProgress">0/0</span><label>Month Done</label></div>
+        <div class="stat"><span id="lifetimePct">0%</span><label>Lifetime %</label></div>
+        <div class="stat"><span id="lifetimeDone">0</span><label>Lifetime Done</label></div>
       </div>
     </section>
 
@@ -52,13 +74,12 @@
           <input type="file" id="importFile" accept=".json" hidden>
           <span class="button">Import Data</span>
         </label>
-        <button id="deleteHabitBtn" class="danger">Delete Habit</button>
       </div>
       <p class="fine">Tip: Tap a day to toggle completion. Data is saved locally (IndexedDB) and survives refresh/restarts.</p>
     </section>
   </main>
 
-  <!-- Single Add -->
+  <!-- Add Habit Dialog -->
   <dialog id="habitDialog">
     <form id="habitForm">
       <h3>New Habit</h3>
@@ -76,50 +97,6 @@
     </form>
   </dialog>
 
-  <!-- Bulk Add -->
-  <dialog id="bulkDialog">
-    <form id="bulkForm">
-      <h3>Add Multiple Habits</h3>
-      <p class="fine">One per line. Optional emoji and hex color (e.g., <code>📖 Read 20m #ff9800</code>).</p>
-      <textarea id="bulkText" rows="8" placeholder="📖 Read 20m #ff9800
-Workout
-💧 Hydrate #3fa9f5"></textarea>
-      <menu>
-        <button type="button" onclick="document.getElementById('bulkDialog').close()">Cancel</button>
-        <button type="submit" class="primary">Create All</button>
-      </menu>
-    </form>
-  </dialog>
-
   <script src="app.js"></script>
-  <script>
-    // Robust offline-ready detection + fallback verification
-    (function(){
-      const banner = document.getElementById('offlineBanner');
-      function showBanner(){ if(banner && banner.hasAttribute('hidden')) banner.removeAttribute('hidden'); }
-      // Listen for SW messages
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.addEventListener('message', (e)=>{
-          if (e.data && (e.data.type==='offline-ready' || e.data==='offline-ready')) showBanner();
-        });
-        // If SW is already controlling, verify cache contents
-        navigator.serviceWorker.ready.then(()=>verifyCache().then(ok=>ok && showBanner()));
-        // Fallback timer: try verify after 30s
-        setTimeout(()=>verifyCache().then(ok=>ok && showBanner()), 30000);
-      }
-      async function verifyCache(){
-        if (!('caches' in window)) return false;
-        try{
-          const cache = await caches.open('habitxfullfix-v2');
-          const needed = [
-            './','./index.html','./styles.css','./app.js','./manifest.webmanifest',
-            './icons/icon-192.png','./icons/icon-512.png','./apple-touch-icon.png'
-          ];
-          const checks = await Promise.all(needed.map(u=>cache.match(u)));
-          return checks.every(Boolean);
-        }catch(e){ return false; }
-      }
-    })();
-  </script>
 </body>
 </html>

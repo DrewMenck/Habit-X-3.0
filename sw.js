@@ -1,5 +1,5 @@
-// Robust offline-ready SW: notifies after install and after activate
-const CACHE = 'habitxfullfix-v2';
+// SW: cache-first app shell + robust offline-ready signal
+const CACHE = 'habitxfullfix-v3';
 const APP_SHELL = [
   './',
   './index.html',
@@ -23,7 +23,6 @@ self.addEventListener('install', (e) => {
     const cache = await caches.open(CACHE);
     await cache.addAll(APP_SHELL);
     await self.skipWaiting();
-    // Try to notify at install (some browsers ignore this until activate, but harmless)
     await notifyClients();
   })());
 });
