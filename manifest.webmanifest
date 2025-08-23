@@ -1,7 +1,6 @@
 {
   "name": "HabitX",
   "short_name": "HabitX",
-  "description": "Offline-first habit tracker with streaks and lifetime stats. Mark days with an animated X.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f0f12",
